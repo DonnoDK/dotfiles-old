@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# gap between windows
+bspc config window_gap 30
+
+# setup 4 virtual desktops
+bspc monitor --reset-desktops 1 2 3 4
+
+# focus follows mouse
+bspc config focus_follows_pointer true

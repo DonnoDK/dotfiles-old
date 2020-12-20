@@ -1,0 +1,32 @@
+alt + shift + Return
+    alacritty
+alt + shift + e
+    emacs
+alt + shift + c
+    qutebrowser
+alt + shift + r
+    dmenu_run
+
+ctrl + q
+     bspc node --close
+
+# focus desktop
+alt + {1-4}
+      bspc desktop --focus ^{1-4}
+
+# move to desktop
+alt + shift + {1-4}
+      bspc node --to-desktop ^{1-4} --focus
+
+# toggle fullscreen
+alt + shift + f
+    bspc node --state \~fullscreen
+
+# resize
+alt + shift + Right
+    bspc node -z right 10 0
+
+alt + shift + Left
+    bspc node -z right -10 0
+
+# need switching, moving and resizing nodes
