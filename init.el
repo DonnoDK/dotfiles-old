@@ -85,11 +85,24 @@
 (use-package magit
   :ensure t)
 
+(use-package git-gutter-fringe
+  :ensure t
+  :diminish git-gutter-mode
+  :config (global-git-gutter-mode))
+
 (use-package doom-themes
   :ensure t)
 
 (use-package rainbow-delimiters
   :ensure t
   :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+
+(use-package org
+  :ensure t)
+
+(use-package org-bullets
+  :ensure t
+  :commands (org-bullets-mode)
+  :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 (load-theme 'doom-one)
