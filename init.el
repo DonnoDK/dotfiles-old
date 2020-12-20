@@ -41,24 +41,7 @@
 (global-set-key (kbd "C-S-<up>")    'windmove-up)
 (global-set-key (kbd "C-S-<down>")  'windmove-down)
 
-
-
-
-;; mu4e setup
-
-(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
-(require 'mu4e)
-(setq mu4e-maildir (expand-file-name "~/.mail/gmail"))
-
-
-
-;; rest of packages
-
-
-
-
-
-
+;; packages
 
 (require 'linum)
 (global-linum-mode t)
