@@ -106,3 +106,9 @@
   :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 (load-theme 'doom-one)
+
+(defun save-all-and-compile ()
+  (interactive)
+  (save-some-buffers 1)
+  (compile compile-command))
+(global-set-key [f12] 'save-all-and-compile)
