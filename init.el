@@ -7,10 +7,11 @@
       inhibit-startup-screen t
       make-backup-files nil
       auto-save-default nil
-      mac-option-modifier nil
-      mac-command-modifier 'meta
+      mac-right-option-modifier nil
+      ;mac-command-modifier 'meta
       exec-path (append exec-path '("/usr/local/bin"))
-      exec-path (append exec-path '("/usr/bin")))
+      exec-path (append exec-path '("/usr/bin"))
+      exec-path (append exec-path '("/opt/homebrew/bin")))
 
 (show-paren-mode 1)
 (column-number-mode 1)
@@ -55,6 +56,32 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+(use-package visual-regexp
+  :ensure t)
+
+(use-package beacon
+  :ensure t
+  :config
+  (beacon-mode 1))
+
+(use-package highlight-thing
+  :ensure t
+  :config
+  (global-highlight-thing-mode))
+
+(use-package helm
+  :ensure t
+  :bind (("M-x" . helm-M-x)
+         ("C-x C-f" . helm-find-files)
+         ("C-x C-b" . helm-buffers-list)))
+
+(use-package helm-swoop
+  :ensure t
+  :bind (("C-s" . helm-swoop)))
+
+(use-package cider
+  :ensure t)
+
 (use-package paredit
   :ensure t
   :config (progn
@@ -67,20 +94,6 @@
 (use-package which-key
   :ensure t
   :config (which-key-mode))
-
-(use-package ivy
-  :ensure t
-  :config
-  (setq ivy-use-virtual-buffers t
-        ivy-count-format "%d/%d ")
-  (ivy-mode 1))
-
-(use-package counsel
-  :ensure t
-  :bind (("M-x" . counsel-M-x)
-         ("C-s" . swiper)
-         ("C-x C-f" . counsel-find-file)
-         ("C-x C-g" . counsel-fzf)))
 
 (use-package magit
   :ensure t)
@@ -105,7 +118,12 @@
   :commands (org-bullets-mode)
   :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
-(load-theme 'doom-one)
+(use-package company
+  :ensure t
+  :config (global-company-mode))
+
+(load-theme 'doom-dark+)
+(set-frame-font "Iosevka 16" nil)
 
 (defun save-all-and-compile ()
   (interactive)
