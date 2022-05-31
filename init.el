@@ -1,54 +1,52 @@
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file 'noerror)
-
-(setq tab-always-indent 'complete
+(setq custom-file "~/.emacs.d/custom.el"
+      tab-always-indent 'complete
       inhibit-startup-message t
       inhibit-startup-echo-area-message t
       inhibit-startup-screen t
       make-backup-files nil
       auto-save-default nil
-      mac-right-option-modifier nil
-      ;mac-command-modifier 'meta
+      mac-option-modifier 'meta
+      mac-option-modifier nil
       exec-path (append exec-path '("/usr/local/bin"))
       exec-path (append exec-path '("/usr/bin"))
-      exec-path (append exec-path '("/opt/homebrew/bin")))
+      exec-path (append exec-path '("/opt/homebrew/bin"))
+      user-full-name "Brian Bernt Frost"
+      user-mail-address "brianfrostpedersen@gmail.com"
+      current-language-environment "UTF-8"
+      )
 
-(show-paren-mode 1)
-(column-number-mode 1)
-(blink-cursor-mode 0)
-     
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
 
-(setq-default tab-width 4
-              indent-tabs-mode nil
-              kill-whole-line t
-              c-basic-offset 4
+(load custom-file 'noerror)
+
+(setq-default tab-width           4
+              indent-tabs-mode  nil
+              kill-whole-line     t
+              c-basic-offset      4
               c-default-style "bsd")
-
-(setq user-full-name "Brian Bernt Frost")
-(setq user-mail-address "brianfrostpedersen@gmail.com")
-(add-to-list 'completion-styles 'initials t)
-
-(prefer-coding-system        'utf-8)
-(set-default-coding-systems  'utf-8)
-(set-language-environment    'utf-8)
-(set-selection-coding-system 'utf-8)
-(setq current-language-environment "UTF-8")
 
 (global-set-key (kbd "C-S-<left>")  'windmove-left)
 (global-set-key (kbd "C-S-<right>") 'windmove-right)
 (global-set-key (kbd "C-S-<up>")    'windmove-up)
 (global-set-key (kbd "C-S-<down>")  'windmove-down)
 
-;; packages
+(show-paren-mode    1)
+(column-number-mode 1)
+(blink-cursor-mode  0)
+(menu-bar-mode     -1)
+(tool-bar-mode     -1)
+(scroll-bar-mode   -1)
+
+(prefer-coding-system        'utf-8)
+(set-default-coding-systems  'utf-8)
+(set-language-environment    'utf-8)
+(set-selection-coding-system 'utf-8)
 
 (require 'linum)
+(require 'package)
+
+(setq package-enable-at-startup nil)
 (global-linum-mode t)
 
-(require 'package)
-(setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 
@@ -56,13 +54,14 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(use-package visual-regexp
-  :ensure t)
-
-(use-package beacon
+(use-package paredit
   :ensure t
-  :config
-  (beacon-mode 1))
+  :config (progn
+            (add-hook 'lisp-mode-hook       #'paredit-mode)
+            (add-hook 'scheme-mode-hook     #'paredit-mode)
+            (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
+            (add-hook 'emacs-mode-hook      #'paredit-mode)
+            (add-hook 'clojure-mode-hook    #'paredit-mode)))
 
 (use-package highlight-thing
   :ensure t
@@ -78,18 +77,6 @@
 (use-package helm-swoop
   :ensure t
   :bind (("C-s" . helm-swoop)))
-
-(use-package cider
-  :ensure t)
-
-(use-package paredit
-  :ensure t
-  :config (progn
-            (add-hook 'lisp-mode-hook       #'paredit-mode)
-            (add-hook 'scheme-mode-hook     #'paredit-mode)
-            (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
-            (add-hook 'emacs-mode-hook      #'paredit-mode)
-            (add-hook 'clojure-mode-hook    #'paredit-mode)))
 
 (use-package which-key
   :ensure t
@@ -110,6 +97,12 @@
   :ensure t
   :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
+(use-package haskell-mode
+  :ensure t
+  :config (progn
+            (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+            (custom-set-variables '(haskell-process-type 'stack-ghci))))
+
 (use-package org
   :ensure t)
 
@@ -122,11 +115,14 @@
   :ensure t
   :config (global-company-mode))
 
-(load-theme 'doom-dark+)
-(set-frame-font "Iosevka 16" nil)
+(use-package cider
+  :ensure t)
 
-(defun save-all-and-compile ()
-  (interactive)
-  (save-some-buffers 1)
-  (compile compile-command))
-(global-set-key [f12] 'save-all-and-compile)
+(use-package elpy
+  :ensure t
+  :init (elpy-enable))
+
+(when (member "Iosevka" (font-family-list))
+  (set-frame-font "Iosevka-24" nil t))
+
+(load-theme 'doom-dracula)
