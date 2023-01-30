@@ -10,6 +10,7 @@
       exec-path (append exec-path '("/usr/local/bin"))
       exec-path (append exec-path '("/usr/bin"))
       exec-path (append exec-path '("/opt/homebrew/bin"))
+      exec-path (append exec-path '("~/go/bin"))
       user-full-name "Brian Bernt Frost"
       user-mail-address "brianfrostpedersen@gmail.com"
       current-language-environment "UTF-8"
@@ -113,6 +114,9 @@
 
 (use-package company
   :ensure t
+  :init
+  (setq company-idle-delay 0
+        company-minimum-prefix-length 1)
   :config (global-company-mode))
 
 (use-package cider
@@ -121,6 +125,39 @@
 (use-package elpy
   :ensure t
   :init (elpy-enable))
+
+(defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+
+(use-package go-mode
+  :ensure t
+  :init
+  (add-hook 'go-mode-hook #'lsp-deferred)
+  (add-hook 'go-mode-hook #'yas-minor-mode)
+  (add-hook 'go-mode-hook #'lsp-go-install-save-hooks))
+
+(use-package lsp-mode
+  :ensure t
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :hook
+  (go-mode . lsp)
+  (lsp-mode . lsp-enable-which-key-integration)
+  :commands lsp) 
+
+(use-package helm-lsp
+  :ensure t
+  :commands helm-lsp-workspace-symbol)
+
+(use-package yasnippet
+  :ensure t)
+
+(use-package yasnippet-snippets
+  :ensure t)
+
+(use-package lua-mode
+  :ensure t)
 
 (when (member "Iosevka" (font-family-list))
   (set-frame-font "Iosevka-24" nil t))
